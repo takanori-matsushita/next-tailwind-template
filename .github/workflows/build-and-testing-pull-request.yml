@@ -1,0 +1,48 @@
+name: build and testing on PR
+on:
+  pull_request:
+
+env:
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+  SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+  SLACK_TITLE: ${{ secrets.SLACK_TITLE }}
+  SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
+  SLACK_ICON: ${{ secrets.SLACK_ICON_URL }}
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests with ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: node module install
+        run: yarn install
+
+      - name: Next build
+        run: yarn build
+
+      - name: Lint check
+        run: yarn lint
+
+      # ビルド成功時
+      - name: Slack Notification on Success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2.0.2
+        env:
+          SLACK_MESSAGE: フロントエンドのビルドに成功しました
+          SLACK_COLOR: good
+      # ビルド失敗時
+      - name: Slack Notification on Failure
+        uses: rtCamp/action-slack-notify@v2.0.2
+        if: failure()
+        env:
+          SLACK_MESSAGE: フロントエンドのビルドに失敗しました
+          SLACK_COLOR: danger
