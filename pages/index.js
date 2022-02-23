@@ -2,10 +2,17 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useEffect } from "react";
+import docSlider from "../public/docSlider";
 // Import Swiper styles
 import "swiper/css";
+import "docslider/docSlider.css";
 
 export default function Home() {
+  useEffect(() => {
+    docSlider.init();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -13,15 +20,16 @@ export default function Home() {
         <meta name="description" content="This page is wedding profile movie" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main>
-        <Swiper
+        {/* <Swiper
           slidesPerView={1}
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
         >
           <SwiperSlide>
-            <div className="w-full h-screen bg-green-300">Slide 1</div>
+            <div className="w-full h-screen bg-green-300">
+              <Image src="/naoya/interhigh2.jpg" layout="fill" />
+            </div>
           </SwiperSlide>
           <SwiperSlide>
             <div className="w-full h-screen bg-blue-300">Slide 2</div>
@@ -32,13 +40,12 @@ export default function Home() {
           <SwiperSlide>
             <div className="w-full h-screen bg-yellow-300">Slide 4</div>
           </SwiperSlide>
-        </Swiper>
+        </Swiper> */}
+        <div className="docSlider">
+          <section>aaa</section>
+          <section>...</section>
+        </div>
       </main>
-
-      <footer className={styles.footer}>
-        Powered by&nbsp;
-        <span className="italic font-semibold">Takanori Matsushita</span>
-      </footer>
     </div>
   );
 }
